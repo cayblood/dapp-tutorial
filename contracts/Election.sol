@@ -8,10 +8,11 @@ contract Election is Ownable {
       uint voteCount;
   }
   Candidate[] public candidates;
+
   function addCandidate(bytes32 name) public onlyOwner {
-    candidates.push(Candidate({
-      name: name,
-      voteCount: 0
-    }));
+    Candidate memory candidate;
+    candidate.name = name;
+    candidate.voteCount = 0;
+    candidates.push(candidate);
   }
 }
