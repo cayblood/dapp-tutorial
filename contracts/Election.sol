@@ -7,12 +7,71 @@ contract Election is Ownable {
       bytes32 name;
       uint voteCount;
   }
-  Candidate[] public candidates;
+  mapping(bytes32 => Candidate) candidates;
+  bytes32[] candidateNames;
+
+  struct Voter {
+    uint weight;
+    bool voted;
+  }
+  mapping(address => Voter) voters;
+  mapping(address => bool) voterLookup;
 
   function addCandidate(bytes32 name) public onlyOwner {
     Candidate memory candidate;
     candidate.name = name;
     candidate.voteCount = 0;
-    candidates.push(candidate);
+    candidates[name] = candidate;
+    candidateNames.push(name);
+  }
+
+  function getCandidateCount() public constant returns (uint) {
+    return candidateNames.length;
+  }
+
+  function getCandidateNameForIndex(uint index) public constant returns (bytes32) {
+    if (index >= candidateNames.length) {
+      revert('No candidate at that index.');
+    }
+    return candidateNames[index];
+  }
+
+  function registerVoter() public {
+    Voter memory voter;
+    voter.weight = 0;
+    voter.voted = false;
+    voterLookup[msg.sender] = true;
+    voters[msg.sender] = voter;
+  }
+
+  function approveRegistration(address voterAddr) public onlyOwner {
+    voters[voterAddr].weight = 1;
+  }
+
+  function voterIsRegistered(address voterAddr) public constant returns(bool) {
+    return voterLookup[voterAddr];
+  }
+
+  function registrationIsApproved(address voterAddr) public constant returns(bool) {
+    return voters[voterAddr].weight == 1;
+  }
+
+  function voteForCandidate(bytes32 name) public returns(uint) {
+    if (candidates[name].name != name) {
+      revert('No candidate found with that name.');
+    }
+    uint voteCount = candidates[name].voteCount;
+    candidates[name].voteCount += voters[msg.sender].weight;
+    if (voteCount < candidates[name].voteCount) {
+      voters[msg.sender].voted = true;
+    }
+    return candidates[name].voteCount;
+  }
+
+  function getVoteCountForCandidate(bytes32 name) public constant returns(uint) {
+    if (candidates[name].name != name) {
+      revert('No candidate found with that name.');
+    }
+    return candidates[name].voteCount;
   }
 }
