@@ -12,5 +12,6 @@ Election dapp tutorial
 
 ## running the dapp
 1. Run ganache
-2. `python -m SimpleHTTPServer 8000`
-3. Open browser to http://localhost:8000/
+2. `cd www`
+3. `python -m SimpleHTTPServer 8000`
+4. Open browser to http://localhost:8000/
