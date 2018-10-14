@@ -61,9 +61,11 @@ contract Election is Ownable {
       revert('No candidate found with that name.');
     }
     uint voteCount = candidates[name].voteCount;
-    candidates[name].voteCount += voters[msg.sender].weight;
-    if (voteCount < candidates[name].voteCount) {
-      voters[msg.sender].voted = true;
+    if (!voters[msg.sender].voted) {
+      candidates[name].voteCount += voters[msg.sender].weight;
+      if (voteCount < candidates[name].voteCount) {
+        voters[msg.sender].voted = true;
+      }
     }
     return candidates[name].voteCount;
   }

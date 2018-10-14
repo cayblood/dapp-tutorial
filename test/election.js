@@ -106,7 +106,7 @@ contract('Election', (accounts) => {
       }
     });
 
-    it("Doesn't increment the candidate's vote count if the voter isn't registered.", async() => {
+    it("Doesn't increment the candidate's vote count if the voter isn't registered.", async () => {
       await instance.addCandidate('George Washington', {from: owner});
       const voteCount = await instance.getVoteCountForCandidate('George Washington');
       await instance.voteForCandidate('George Washington', {from: unregistered});
@@ -114,7 +114,7 @@ contract('Election', (accounts) => {
       assert(voteCount.eq(newVoteCount));
     });
 
-    it("Doesn't increment the candidate's vote count if the voter isn't approved.", async() => {
+    it("Doesn't increment the candidate's vote count if the voter isn't approved.", async () => {
       await instance.addCandidate('George Washington', {from: owner});
       await instance.registerVoter({from: unapproved});
       const voteCount = await instance.getVoteCountForCandidate('George Washington');
@@ -123,7 +123,7 @@ contract('Election', (accounts) => {
       assert(voteCount.eq(newVoteCount));
     });
 
-    it("Increments the candidate's vote count if the voter is approved.", async() => {
+    it("Increments the candidate's vote count if the voter is approved.", async () => {
       await instance.addCandidate('George Washington', {from: owner});
       await instance.registerVoter({from: voter});
       await instance.approveRegistration(voter, {from: owner});
@@ -131,6 +131,17 @@ contract('Election', (accounts) => {
       await instance.voteForCandidate('George Washington', {from: voter});
       const newVoteCount = await instance.getVoteCountForCandidate('George Washington');
       assert(voteCount.lt(newVoteCount));
+    });
+
+    it("Doesn't let a person vote twice.", async () => {
+      await instance.addCandidate('George Washington', {from: owner});
+      await instance.registerVoter({from: voter});
+      await instance.approveRegistration(voter, {from: owner});
+      const voteCount = await instance.getVoteCountForCandidate('George Washington');
+      await instance.voteForCandidate('George Washington', {from: voter});
+      await instance.voteForCandidate('George Washington', {from: voter});
+      const newVoteCount = await instance.getVoteCountForCandidate('George Washington');
+      assert(voteCount.plus(new BigNumber(1)).eq(newVoteCount));      
     });
   });
 });
