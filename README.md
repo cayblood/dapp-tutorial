@@ -2,8 +2,9 @@
 Election dapp tutorial
 
 ## installation
-1. install truffle
-2. install ganache
+0. enter desired npm environment using nvm (if desired)
+1. `npm install -g truffle`
+2. install [ganache](https://truffleframework.com/ganache)
 3. `npm install`
 
 ## testing
