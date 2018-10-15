@@ -86,11 +86,15 @@ contract SimpleStore {
 }
     </code></pre>
 
-    <script type="text/javascript" src="ethereumjs-testrpc.js"></script>
-    <script type="text/javascript" src="ethjs.js"></script>
+    <script type="text/javascript" src="node_modules/web3/dist/web3.min.js"></script>
     <script type="text/javascript">
       var el = function (id) { return document.querySelector(id); };
-      var eth = new Eth(TestRPC.provider());
+      if (typeof web3 !== 'undefined') {
+      //   web3 = new Web3(web3.currentProvider);
+      // } else {
+        // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+      }
       var SimpleStoreBytecode = '606060405234610000575b6090806100176000396000f360606040526000357c01000000000000000000000000000000000000000000000000000000009004806360fe47b11460405780636d4ce63c14605a575b6000565b3460005760586004808035906020019091905050607a565b005b3460005760646085565b6040518082815260200191505060405180910390f35b806000819055505b50565b600060005490505b9056';
       var SimpleStoreABI = [{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
       var SimpleStore;
@@ -137,9 +141,11 @@ contract SimpleStore {
       }
 
       function createNewContract() {
+        console.log("HERE");
         SimpleStore.new({}).then(function (txHash) {
+          console.log("HERE2");
           var checkTransaction = setInterval(function () {
-            eth.getTransactionReceipt(txHash).then(function (receipt) {
+            web3.getTransactionReceipt(txHash).then(function (receipt) {
               var remember = el('#remember').checked;
               if (receipt) {
                 el('#response').innerHTML = 'Contract deployed to address: ' + String(receipt.contractAddress);
@@ -158,6 +164,7 @@ contract SimpleStore {
           }, 400);
         })
         .catch(function(error){
+          console.log("Here3");
           console.log({error: error});
           el('#response').innerHTML = 'There was an error: ' + String(error);
         });
@@ -201,14 +208,12 @@ contract SimpleStore {
 
       var checkForMetamask = setInterval(function () {
         if (typeof window.web3 !== 'undefined' && typeof window.web3.currentProvider !== 'undefined') {
-          eth.setProvider(window.web3.currentProvider);
+          web3.setProvider(window.web3.currentProvider);
           clearInterval(checkForMetamask);
-          eth.accounts().then(function(accounts) {
-            SimpleStore = eth.contract(SimpleStoreABI, SimpleStoreBytecode, { from: accounts[0], gas: 300000 });
-            setupButtonAction();
-            selectContract();
-            initializePageElements();
-          });
+          SimpleStore = web3.eth.contract(SimpleStoreABI, SimpleStoreBytecode, { from: web3.eth.accounts[0], gas: 300000 });
+          setupButtonAction();
+          selectContract();
+          initializePageElements();
         }
       }, 500);
     </script>
