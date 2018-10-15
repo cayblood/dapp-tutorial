@@ -141,9 +141,7 @@ contract SimpleStore {
       }
 
       function createNewContract() {
-        console.log("HERE");
         SimpleStore.new({}).then(function (txHash) {
-          console.log("HERE2");
           var checkTransaction = setInterval(function () {
             web3.getTransactionReceipt(txHash).then(function (receipt) {
               var remember = el('#remember').checked;
@@ -164,7 +162,6 @@ contract SimpleStore {
           }, 400);
         })
         .catch(function(error){
-          console.log("Here3");
           console.log({error: error});
           el('#response').innerHTML = 'There was an error: ' + String(error);
         });
