@@ -16,6 +16,7 @@ contract Election is Ownable {
   }
   mapping(address => Voter) voters;
   mapping(address => bool) voterLookup;
+  address[] registrations;
 
   function addCandidate(bytes32 name) public onlyOwner {
     Candidate memory candidate;
@@ -42,6 +43,18 @@ contract Election is Ownable {
     voter.voted = false;
     voterLookup[msg.sender] = true;
     voters[msg.sender] = voter;
+    registrations.push(msg.sender);
+  }
+
+  function getRegistrationCount() public constant returns (uint) {
+    return registrations.length;
+  }
+
+  function getRegistrationForIndex(uint index) public constant returns (address) {
+    if (index >= registrations.length) {
+      revert('No registration at that index.');
+    }
+    return registrations[index];
   }
 
   function approveRegistration(address voterAddr) public onlyOwner {

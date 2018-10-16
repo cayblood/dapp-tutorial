@@ -94,6 +94,22 @@ contract('Election', (accounts) => {
       const registered = await instance.voterIsRegistered.call(unregistered);
       assert(registered === false);
     });
+
+    it('adding a registration should increase the registration count', async () => {
+      const registrationCount = await instance.getRegistrationCount();
+      await instance.registerVoter({from: voter});
+      const newRegistrationCount = await instance.getRegistrationCount();
+      assert(registrationCount.lt(newRegistrationCount));
+    });
+
+    it('registrations can be enumerated', async () => {
+      let startingIndex = await instance.getRegistrationCount();
+      await instance.registerVoter({from: voter});
+      let registration = await instance.getRegistrationForIndex(startingIndex);
+      assert.equal(registration, voter);
+      let endingIndex = await instance.getRegistrationCount();
+      assert(endingIndex.eq(startingIndex.plus(1)));
+    });
   });
 
   describe('approveRegistration', () => {
