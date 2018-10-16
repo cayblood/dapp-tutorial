@@ -34,6 +34,9 @@ class AdminArea extends Component {
 
   approve = () => {
     this.props.batchApprove(this.state.checked);
+    this.setState({
+      checked: []
+    });
   };
 
   setName = event => {
