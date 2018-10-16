@@ -46,7 +46,6 @@ class AdminArea extends Component {
 
   render() {
     const { classes, pendingVoters } = this.props;
-    console.log(this.props);
     return (
       <>
         <Card className={classes.card}>

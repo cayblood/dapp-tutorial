@@ -59,7 +59,9 @@ export default class AppProvider extends Component {
           }
         }
         const candidates = await this.fetchCandidates(this.state.contract);
+        const pendingVoters = await this.fetchPendingVoters();
         this.setState({
+          pendingVoters,
           candidates,
           user: userData
         });
@@ -91,21 +93,13 @@ export default class AppProvider extends Component {
 
   async fetchPendingVoters() {
     const { contract } = this.state;
-    const candidates = [];
-    const count = await contract.methods.getCandidateCount().call();
+    const registrations = [];
+    const count = await contract.methods.getRegistrationCount().call();
     for (let i = 0; i < count; i++) {
-      const bytesName = await contract.methods
-        .getCandidateNameForIndex(i)
-        .call();
-      const votes = await contract.methods
-        .getVoteCountForCandidate(bytesName)
-        .call();
-      candidates.push({
-        name: utils.hexToUtf8(bytesName),
-        votes
-      });
+      const address = await contract.methods.getRegistrationForIndex(i).call();
+      registrations.push(address);
     }
-    return candidates;
+    return registrations;
   }
 
   // Web3 Calls
@@ -155,6 +149,8 @@ export default class AppProvider extends Component {
         .addCandidate(hexName)
         .send({ from: address })
         .on("error", error => {
+          console.log("error", error);
+
           reject(error);
         })
         .on("receipt", receipt => {
