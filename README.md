@@ -3,9 +3,12 @@ Election dapp tutorial
 
 ## installation
 0. enter desired npm environment using nvm (if desired)
-1. `npm install -g truffle`
-2. install [ganache](https://truffleframework.com/ganache)
-3. `npm install`
+1. `npm install -g yarn`
+2. `yarn global add truffle`
+3. install [ganache](https://truffleframework.com/ganache)
+4. `yarn`
+5. `cd interface`
+6. `yarn` 
 
 ## testing
 1. Run ganache
@@ -13,6 +16,5 @@ Election dapp tutorial
 
 ## running the dapp
 1. Run ganache
-2. `cd www`
-3. `python -m SimpleHTTPServer 8000`
-4. Open browser to http://localhost:8000/
+2. `cd interface`
+3. `yarn start`
