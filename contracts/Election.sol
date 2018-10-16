@@ -48,6 +48,12 @@ contract Election is Ownable {
     voters[voterAddr].weight = 1;
   }
 
+  function approveRegistrations(address[] voterAddresses) public onlyOwner {
+    for (uint i = 0; i < voterAddresses.length; i++) {
+      approveRegistration(voterAddresses[i]);
+    }
+  }
+
   function voterIsRegistered(address voterAddr) public constant returns(bool) {
     return voterLookup[voterAddr];
   }
