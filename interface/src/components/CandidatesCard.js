@@ -31,6 +31,7 @@ const styles = () => ({
     padding: "20px 0"
   },
   card: {
+    marginTop: 20,
     minWidth: 275,
     width: "80vw"
   }

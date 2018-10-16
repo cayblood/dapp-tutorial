@@ -1,24 +1,27 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 
 import CandidatesCard from "./CandidatesCard";
+import AdminArea from "./AdminArea";
+import TopBar from "./TopBar";
+import Error from "./Error";
+
+import applyContext from "./Context";
 
 const Home = props => {
-  const { classes } = props;
+  const { classes, user } = props;
   return (
     <div className={classes.root}>
-      <AppBar className={classes.bar} position="static">
-        <Toolbar>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
-            Mainframe MeetUp - Voting Dapp
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <TopBar />
       <div className={classes.main}>
-        <CandidatesCard />
+        {user.address ? (
+          <>
+            <CandidatesCard />
+            {user.admin && <AdminArea />}
+          </>
+        ) : (
+          <Error message="Eita, parece que você não tem o MetaMask instalado, ou não está conectado na rede correta." />
+        )}
       </div>
     </div>
   );
@@ -31,18 +34,13 @@ const styles = () => ({
     flexGrow: 1,
     background: "#d3d3d3"
   },
-  bar: {
-    height: 70
-  },
-  grow: {
-    flexGrow: 1
-  },
   main: {
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 30
+    justifyContent: "center"
   }
 });
 
-export default withStyles(styles)(Home);
+const StyledHome = withStyles(styles)(Home);
+export default applyContext(StyledHome);

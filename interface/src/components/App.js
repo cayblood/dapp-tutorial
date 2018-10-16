@@ -13,13 +13,18 @@ const CANDIDATES = [
 
 export default class AppProvider extends Component {
   state = {
-    user: {},
+    user: {
+      address: "0x9999",
+      admin: true
+    },
     candidates: CANDIDATES,
-    pendingVoters: []
+    pendingVoters: ["0x2221", "0x2222", "0x2223", "0x2224", "0x2225"]
   };
 
   vote = () => {};
-  approve = () => {};
+  approve = voters => {
+    console.log(voters);
+  };
   requestApproval = voter => {};
 
   render() {
