@@ -16,13 +16,14 @@ class CadidatesCard extends Component {
   };
 
   selectCandidate = candidate => {
-    this.props.user.registration !== "pendingApproval" &&
+    this.props.user.registration === "approved" &&
       !this.props.user.voted &&
       this.setState({ candidate });
   };
 
   vote = () => {
     this.props.vote(this.state.candidate);
+    this.setState({ candidate: "" });
   };
 
   render() {
@@ -39,7 +40,7 @@ class CadidatesCard extends Component {
                 onSelect={this.selectCandidate}
                 selected={
                   !user.voted &&
-                  user.registration !== "pendingApproval" &&
+                  user.registration === "approved" &&
                   this.state.candidate === item.name
                 }
                 key={`candidate-${index}`}
@@ -60,7 +61,7 @@ class CadidatesCard extends Component {
           )}
         </CardContent>
 
-        {user.registration !== "pendingApproval" &&
+        {user.registration === "approved" &&
           !user.voted && (
             <Button
               disabled={!this.state.candidate}
