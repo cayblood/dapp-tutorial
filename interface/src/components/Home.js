@@ -3,6 +3,8 @@ import { withStyles } from "@material-ui/core/styles";
 
 import CandidatesCard from "./CandidatesCard";
 import AdminArea from "./AdminArea";
+import UserArea from "./UserArea";
+
 import TopBar from "./TopBar";
 import Error from "./Error";
 
@@ -10,6 +12,7 @@ import applyContext from "./Context";
 
 const Home = props => {
   const { classes, user } = props;
+  console.log(user);
   return (
     <div className={classes.root}>
       <TopBar />
@@ -17,7 +20,7 @@ const Home = props => {
         {user.address ? (
           <>
             <CandidatesCard />
-            {user.admin && <AdminArea />}
+            {user.admin ? <AdminArea /> : <UserArea />}
           </>
         ) : (
           <Error message="Eita, parece que você não tem o MetaMask instalado, ou não está conectado na rede correta." />

@@ -9,12 +9,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 import applyContext from "./Context";
 
-class CadidatesCard extends Component {
+class AdminArea extends Component {
   state = {
-    checked: []
+    checked: [],
+    name: ""
   };
 
   toggleItem = item => {
@@ -33,44 +35,83 @@ class CadidatesCard extends Component {
     this.props.approve(this.state.checked);
   };
 
+  setName = event => {
+    this.setState({ name: event.target.value });
+  };
+
+  registerCandidate = () => {
+    this.props.addCandidate(this.state.name.substring(0, 32));
+    this.setState({ name: "" });
+  };
+
   render() {
     const { classes, pendingVoters } = this.props;
-
+    console.log(this.props);
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="h5" component="h2" className={classes.title}>
-            Eleitores esperando aprovação.
-          </Typography>
+      <>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h5" component="h2" className={classes.title}>
+              Eleitores esperando aprovação.
+            </Typography>
 
-          <List>
-            {pendingVoters.map(item => (
-              <ListItem
-                key={item}
-                role={undefined}
-                dense
-                button
-                onClick={() => this.toggleItem(item)}
-              >
-                <Checkbox
-                  checked={this.state.checked.indexOf(item) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary={item} />
-              </ListItem>
-            ))}
-          </List>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.approve}
-            className={classes.button}
-          >
-            Approve
-          </Button>
-        </CardContent>
-      </Card>
+            <List>
+              {pendingVoters.map(item => (
+                <ListItem
+                  key={item}
+                  role={undefined}
+                  dense
+                  button
+                  onClick={() => this.toggleItem(item)}
+                >
+                  <Checkbox
+                    checked={this.state.checked.indexOf(item) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                  <ListItemText primary={item} />
+                </ListItem>
+              ))}
+            </List>
+            <Button
+              disabled={this.state.checked.length === 0}
+              variant="contained"
+              color="primary"
+              onClick={this.approve}
+              className={classes.button}
+            >
+              Aprovar
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h5" component="h2" className={classes.title}>
+              Cadastrar um candidato
+            </Typography>
+            <TextField
+              required
+              onChange={this.setName}
+              id="outlined-required"
+              label="Nome do Candidato"
+              className={classes.textField}
+              margin="normal"
+              variant="outlined"
+              value={this.state.name}
+            />
+            <Button
+              disabled={this.state.name.length === 0}
+              variant="contained"
+              color="primary"
+              onClick={this.registerCandidate}
+              className={classes.button}
+            >
+              Salvar
+            </Button>
+          </CardContent>
+        </Card>
+      </>
     );
   }
 }
@@ -86,9 +127,12 @@ const styles = () => ({
   button: {
     margin: "20px auto",
     display: "block"
+  },
+  textField: {
+    width: "100%"
   }
 });
 
-const CadidatesCardStyled = withStyles(styles)(CadidatesCard);
+const AdminAreaStyled = withStyles(styles)(AdminArea);
 
-export default applyContext(CadidatesCardStyled);
+export default applyContext(AdminAreaStyled);

@@ -1,23 +1,39 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Badge from "@material-ui/core/Badge";
 
-const Candidate = ({ classes, name, votes }) => (
-  <>
-    <Divider />
-    <Badge
-      color="primary"
-      badgeContent={votes}
-      classes={{ badge: classes.badge }}
-    >
-      <Typography component="div" className={classes.candidate}>
-        {name}
-      </Typography>
-    </Badge>
-  </>
-);
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+
+const Candidate = ({ classes, name, votes, onSelect, selected }) => {
+  const listClasses = [];
+  const itemClasses = [classes.candidate];
+  if (selected) {
+    listClasses.push(classes.selected);
+    itemClasses.push(classes.selected);
+  }
+  return (
+    <>
+      <Divider />
+      <ListItem
+        role={undefined}
+        dense
+        button
+        onClick={onSelect}
+        className={listClasses}
+      >
+        <Badge
+          color="primary"
+          badgeContent={votes}
+          classes={{ badge: classes.badge }}
+        >
+          <ListItemText primary={name} className={itemClasses} />
+        </Badge>
+      </ListItem>
+    </>
+  );
+};
 
 const styles = theme => ({
   badge: {
@@ -26,7 +42,12 @@ const styles = theme => ({
     left: 0
   },
   candidate: {
-    padding: `10px 0 10px ${theme.spacing.unit * 4}px  `
+    fontSize: 16,
+    padding: `10px 0 10px ${theme.spacing.unit * 4}px!important`
+  },
+  selected: {
+    background: "#3f51b5",
+    color: "white"
   }
 });
 

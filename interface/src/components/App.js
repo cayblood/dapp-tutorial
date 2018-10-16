@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Typography from "@material-ui/core/Typography";
 import Web3 from "web3";
 import utils from "web3-utils";
 import abi from "../election-abi.json";
@@ -7,28 +6,21 @@ import { Provider } from "./Context";
 
 import Home from "./Home";
 
-const CANDIDATES = [
-  { name: "Didi", votes: 2 },
-  { name: "Zacarias", votes: 2 },
-  { name: "Dedé", votes: 2 },
-  { name: "Mussum", votes: 2 }
-];
-
 export default class AppProvider extends Component {
   constructor(props) {
     super(props);
 
     const state = {
       user: {},
-      candidates: CANDIDATES,
-      pendingVoters: ["0x2221", "0x2222", "0x2223", "0x2224", "0x2225"]
+      candidates: [],
+      pendingVoters: []
     };
 
     if (window.web3) {
       state.web3 = new Web3(window.web3.currentProvider);
       state.contract = new state.web3.eth.Contract(
         abi,
-        "0x790dc434d9154f6f60a0b461e245d099965566d6"
+        "0x8700269ffb81ace4784ab27ecf9a633326c478e3"
       );
     }
 
@@ -51,8 +43,8 @@ export default class AppProvider extends Component {
         const owner = await contract.methods.owner().call();
         const userData = {
           registration: registered ? "pendingApproval" : "pendingRegistration",
-          admin: owner === userAddress,
-          address: userAddress
+          admin: owner.toLowerCase() === userAddress.toLowerCase(),
+          address: userAddress.toLowerCase()
         };
         if (registered) {
           const approved = await contract.methods
@@ -79,6 +71,25 @@ export default class AppProvider extends Component {
   }
 
   async fetchCandidates() {
+    const { contract } = this.state;
+    const candidates = [];
+    const count = await contract.methods.getCandidateCount().call();
+    for (let i = 0; i < count; i++) {
+      const bytesName = await contract.methods
+        .getCandidateNameForIndex(i)
+        .call();
+      const votes = await contract.methods
+        .getVoteCountForCandidate(bytesName)
+        .call();
+      candidates.push({
+        name: utils.hexToUtf8(bytesName),
+        votes
+      });
+    }
+    return candidates;
+  }
+
+  async fetchPendingVoters() {
     const { contract } = this.state;
     const candidates = [];
     const count = await contract.methods.getCandidateCount().call();
@@ -147,7 +158,9 @@ export default class AppProvider extends Component {
           reject(error);
         })
         .on("receipt", receipt => {
+          console.log("receipt", receipt);
           resolve(receipt);
+          this.getContractState();
         });
     });
   };
@@ -190,11 +203,7 @@ export default class AppProvider extends Component {
 
   render() {
     if (!this.state.web3) {
-      return (
-        <Typography component="div">
-          Please install metamask to use this app.
-        </Typography>
-      );
+      return <span>Please install metamask to use this app.</span>;
     }
     return (
       <Provider
