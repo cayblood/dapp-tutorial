@@ -7,7 +7,8 @@
     "lodash": "^4.17.11",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5"
+    "react-scripts": "2.0.5",
+    "web3": "^1.0.0-beta.36"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -62,6 +62,10 @@ contract Election is Ownable {
     return voters[voterAddr].weight == 1;
   }
 
+  function voterHasVoted(address voterAddr) public constant returns(bool) {
+    return voters[voterAddr].voted;
+  }
+
   function voteForCandidate(bytes32 name) public returns(uint) {
     if (candidates[name].name != name) {
       revert('No candidate found with that name.');
