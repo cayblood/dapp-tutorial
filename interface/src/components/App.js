@@ -20,7 +20,7 @@ export default class AppProvider extends Component {
       state.web3 = new Web3(window.web3.currentProvider);
       state.contract = new state.web3.eth.Contract(
         abi,
-        "0x8700269ffb81ace4784ab27ecf9a633326c478e3"
+        "0x343fc71d8be1c399cb8aa9982cb37d3c32f1571e"
       );
     }
 
