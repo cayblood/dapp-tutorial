@@ -8,10 +8,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 const Candidate = ({ classes, name, votes, onSelect, selected }) => {
   const listClasses = [];
-  const itemClasses = [classes.candidate];
   if (selected) {
     listClasses.push(classes.selected);
-    itemClasses.push(classes.selected);
   }
   return (
     <>
@@ -20,7 +18,7 @@ const Candidate = ({ classes, name, votes, onSelect, selected }) => {
         role={undefined}
         dense
         button
-        onClick={onSelect}
+        onClick={() => onSelect(name)}
         className={listClasses}
       >
         <Badge
@@ -28,7 +26,7 @@ const Candidate = ({ classes, name, votes, onSelect, selected }) => {
           badgeContent={votes}
           classes={{ badge: classes.badge }}
         >
-          <ListItemText primary={name} className={itemClasses} />
+          <ListItemText primary={name} className={classes.candidate} />
         </Badge>
       </ListItem>
     </>
@@ -46,7 +44,7 @@ const styles = theme => ({
     padding: `10px 0 10px ${theme.spacing.unit * 4}px!important`
   },
   selected: {
-    background: "#3f51b5",
+    background: "yellow",
     color: "white"
   }
 });

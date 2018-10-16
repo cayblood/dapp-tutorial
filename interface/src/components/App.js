@@ -29,6 +29,12 @@ export default class AppProvider extends Component {
 
   async componentDidMount() {
     this.getContractState();
+
+    this.timeout = setInterval(() => this.getContractState(), 2000);
+  }
+
+  componentWillUnmount() {
+    this.timeout && this.timeout();
   }
 
   async getContractState() {
@@ -65,7 +71,6 @@ export default class AppProvider extends Component {
           candidates,
           user: userData
         });
-        console.log("user: ", userData);
       } catch (err) {
         console.warn("err: ", err);
       }
@@ -97,7 +102,12 @@ export default class AppProvider extends Component {
     const count = await contract.methods.getRegistrationCount().call();
     for (let i = 0; i < count; i++) {
       const address = await contract.methods.getRegistrationForIndex(i).call();
-      registrations.push(address);
+      const registered = await contract.methods
+        .registrationIsApproved(address)
+        .call();
+      if (!registered) {
+        registrations.push(address);
+      }
     }
     return registrations;
   }
@@ -149,12 +159,9 @@ export default class AppProvider extends Component {
         .addCandidate(hexName)
         .send({ from: address })
         .on("error", error => {
-          console.log("error", error);
-
           reject(error);
         })
         .on("receipt", receipt => {
-          console.log("receipt", receipt);
           resolve(receipt);
           this.getContractState();
         });

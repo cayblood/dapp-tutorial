@@ -12,7 +12,6 @@ import applyContext from "./Context";
 
 const Home = props => {
   const { classes, user } = props;
-  console.log(user);
   return (
     <div className={classes.root}>
       <TopBar />
@@ -20,7 +19,8 @@ const Home = props => {
         {user.address ? (
           <>
             <CandidatesCard />
-            {user.admin ? <AdminArea /> : <UserArea />}
+            <UserArea />
+            {user.admin && <AdminArea />}
           </>
         ) : (
           <Error message="Eita, parece que você não tem o MetaMask instalado, ou não está conectado na rede correta." />

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { findIndex } from "lodash";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
@@ -32,7 +33,7 @@ class AdminArea extends Component {
   };
 
   approve = () => {
-    this.props.approve(this.state.checked);
+    this.props.batchApprove(this.state.checked);
   };
 
   setName = event => {
@@ -100,7 +101,13 @@ class AdminArea extends Component {
               value={this.state.name}
             />
             <Button
-              disabled={this.state.name.length === 0}
+              disabled={
+                this.state.name.length === 0 ||
+                findIndex(
+                  this.props.candidates,
+                  item => item.name === this.state.name
+                ) >= 0
+              }
               variant="contained"
               color="primary"
               onClick={this.registerCandidate}
