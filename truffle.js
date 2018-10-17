@@ -1,7 +1,7 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
-const INFURA_KEY = "8a882fc993d342df835873366675e6c08a882fc993d342df835873366675e6c0";
-const MNEMONIC = "harvest reflect spoon crush field warrior column trial merit fiber pretty aim";
+const INFURA_KEY = "";
+const MNEMONIC = "";
 
 module.exports = {
   networks: {
