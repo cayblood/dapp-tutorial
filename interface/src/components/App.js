@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import Web3 from "web3";
 import utils from "web3-utils";
+import { uniq } from "lodash";
+
 import abi from "../election-abi.json";
+
 import { Provider } from "./Context";
 
 import Home from "./Home";
@@ -68,7 +71,7 @@ export default class AppProvider extends Component {
         const candidates = await this.fetchCandidates(this.state.contract);
         const pendingVoters = await this.fetchPendingVoters();
         this.setState({
-          pendingVoters,
+          pendingVoters: uniq(pendingVoters),
           candidates,
           user: userData
         });
@@ -207,7 +210,7 @@ export default class AppProvider extends Component {
 
   render() {
     if (!this.state.web3) {
-      return <span>Please install metamask to use this app.</span>;
+      return <span>{MESSAGES.en.homeError}</span>;
     }
     return (
       <Provider
