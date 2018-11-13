@@ -6,6 +6,10 @@ import { Provider } from "./Context";
 
 import Home from "./Home";
 
+import MESSAGES from "../messages";
+
+const CONTRACT = "0x8aec984448c053d8d3ba66056593656e260b042a";
+
 export default class AppProvider extends Component {
   constructor(props) {
     super(props);
@@ -18,10 +22,7 @@ export default class AppProvider extends Component {
 
     if (window.web3) {
       state.web3 = new Web3(window.web3.currentProvider);
-      state.contract = new state.web3.eth.Contract(
-        abi,
-        "0x343fc71d8be1c399cb8aa9982cb37d3c32f1571e"
-      );
+      state.contract = new state.web3.eth.Contract(abi, CONTRACT);
     }
 
     this.state = state;
@@ -216,6 +217,7 @@ export default class AppProvider extends Component {
           requestApproval: this.requestApproval,
           addCandidate: this.addCandidate,
           batchApprove: this.batchApprove,
+          messages: MESSAGES.en,
           ...this.state
         }}
       >

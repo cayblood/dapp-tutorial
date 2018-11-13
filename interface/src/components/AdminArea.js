@@ -49,13 +49,16 @@ class AdminArea extends Component {
   };
 
   render() {
-    const { classes, pendingVoters } = this.props;
+    const { classes, pendingVoters, messages } = this.props;
     return (
       <>
+        <Typography variant="h5" component="h1" className={classes.adminTile}>
+          {messages.admTitle}
+        </Typography>
         <Card className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2" className={classes.title}>
-              Eleitores esperando aprovação.
+              {messages.electorsWaiting}
             </Typography>
 
             <List>
@@ -83,7 +86,7 @@ class AdminArea extends Component {
               onClick={this.approve}
               className={classes.button}
             >
-              Aprovar
+              {messages.approveButton}
             </Button>
           </CardContent>
         </Card>
@@ -91,13 +94,13 @@ class AdminArea extends Component {
         <Card className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2" className={classes.title}>
-              Cadastrar um candidato
+              {messages.addCandidateTitle}
             </Typography>
             <TextField
               required
               onChange={this.setName}
               id="outlined-required"
-              label="Nome do Candidato"
+              label={messages.candidateField}
               className={classes.textField}
               margin="normal"
               variant="outlined"
@@ -116,7 +119,7 @@ class AdminArea extends Component {
               onClick={this.registerCandidate}
               className={classes.button}
             >
-              Salvar
+              {messages.saveButton}
             </Button>
           </CardContent>
         </Card>
@@ -125,6 +128,9 @@ class AdminArea extends Component {
   }
 }
 const styles = () => ({
+  adminTile: {
+    marginTop: 60
+  },
   title: {
     padding: "20px 0"
   },

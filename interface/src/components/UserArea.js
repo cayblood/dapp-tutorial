@@ -10,13 +10,16 @@ import applyContext from "./Context";
 
 class UserArea extends Component {
   render() {
-    const { classes, user } = this.props;
+    const { classes, user, messages } = this.props;
     if (user.registration === "pendingRegistration") {
       return (
         <Card className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2" className={classes.title}>
-              O seu endereço ETH é: {user.address}
+              {messages.requestTitle}
+            </Typography>
+            <Typography variant="h6" component="h5" className={classes.title}>
+              {messages.ethAddress} {user.address}
             </Typography>
 
             <Button
@@ -25,7 +28,7 @@ class UserArea extends Component {
               onClick={this.props.requestApproval}
               className={classes.button}
             >
-              Solicitar Acesso
+              {messages.requestAccessButton}
             </Button>
           </CardContent>
         </Card>

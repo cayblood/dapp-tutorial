@@ -11,7 +11,7 @@ import Error from "./Error";
 import applyContext from "./Context";
 
 const Home = props => {
-  const { classes, user } = props;
+  const { classes, user, messages } = props;
   return (
     <div className={classes.root}>
       <TopBar />
@@ -23,7 +23,7 @@ const Home = props => {
             {user.admin && <AdminArea />}
           </>
         ) : (
-          <Error message="Eita, parece que você não tem o MetaMask instalado, ou não está conectado na rede correta." />
+          <Error message={messages.homeError} />
         )}
       </div>
     </div>

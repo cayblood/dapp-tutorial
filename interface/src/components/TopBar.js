@@ -4,13 +4,15 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
+import applyContext from "./Context";
+
 const TopBar = props => {
-  const { classes } = props;
+  const { classes, messages } = props;
   return (
     <AppBar className={classes.bar} position="static">
       <Toolbar>
         <Typography variant="h6" color="inherit" className={classes.grow}>
-          Mainframe MeetUp - Voting Dapp
+          {messages.dappName}
         </Typography>
       </Toolbar>
     </AppBar>
@@ -26,4 +28,5 @@ const styles = () => ({
   }
 });
 
-export default withStyles(styles)(TopBar);
+const TopBarStyled = withStyles(styles)(TopBar);
+export default applyContext(TopBarStyled);

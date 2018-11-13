@@ -27,57 +27,71 @@ class CadidatesCard extends Component {
   };
 
   render() {
-    const { classes, candidates, user } = this.props;
+    const { classes, candidates, user, messages } = this.props;
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="h5" component="h2" className={classes.title}>
-            Candidatos à presidência da república
-          </Typography>
-          <List>
-            {candidates.map((item, index) => (
-              <Candidate
-                onSelect={this.selectCandidate}
-                selected={
-                  !user.voted &&
-                  user.registration === "approved" &&
-                  this.state.candidate === item.name
-                }
-                key={`candidate-${index}`}
-                name={item.name}
-                votes={item.votes}
-              />
-            ))}
-          </List>
-          {user.voted && (
-            <Typography variant="h6" component="h2" className={classes.title}>
-              Obrigado! Seu voto já foi computado!
+      <>
+        <Typography
+          variant="h5"
+          component="h1"
+          className={classes.electorTitle}
+        >
+          {messages.electorTitle}
+        </Typography>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h5" component="h2" className={classes.title}>
+              {candidates.length > 0
+                ? messages.candidatesTitle
+                : messages.noCandidates}
             </Typography>
-          )}
-          {user.registration === "pendingApproval" && (
-            <Typography variant="h6" component="h2" className={classes.title}>
-              Sua solicitação está aguardando aprovação!
-            </Typography>
-          )}
-        </CardContent>
+            <List>
+              {candidates.map((item, index) => (
+                <Candidate
+                  onSelect={this.selectCandidate}
+                  selected={
+                    !user.voted &&
+                    user.registration === "approved" &&
+                    this.state.candidate === item.name
+                  }
+                  key={`candidate-${index}`}
+                  name={item.name}
+                  votes={item.votes}
+                />
+              ))}
+            </List>
+            {user.voted && (
+              <Typography variant="h6" component="h2" className={classes.title}>
+                {messages.thanksVoted}
+              </Typography>
+            )}
+            {user.registration === "pendingApproval" && (
+              <Typography variant="h6" component="h2" className={classes.title}>
+                {messages.pendingApproval}
+              </Typography>
+            )}
+          </CardContent>
 
-        {user.registration === "approved" &&
-          !user.voted && (
-            <Button
-              disabled={!this.state.candidate}
-              variant="contained"
-              color="primary"
-              onClick={this.vote}
-              className={classes.button}
-            >
-              Votar
-            </Button>
-          )}
-      </Card>
+          {user.registration === "approved" &&
+            !user.voted && (
+              <Button
+                disabled={!this.state.candidate}
+                variant="contained"
+                color="primary"
+                onClick={this.vote}
+                className={classes.button}
+              >
+                {messages.voteButton}
+              </Button>
+            )}
+        </Card>
+      </>
     );
   }
 }
 const styles = () => ({
+  electorTitle: {
+    marginTop: 60
+  },
   title: {
     padding: "20px 0"
   },
