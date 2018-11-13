@@ -16,7 +16,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
-    "test": "cd smart-contracts && yarn migrate",
+    "deploy": "cd interface && yarn deploy",
+    "migrate": "cd smart-contracts && yarn migrate",
     "start": "cd interface && yarn start",
     "test": "cd smart-contracts && yarn test"
   },
