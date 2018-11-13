@@ -18,6 +18,7 @@ export default class AppProvider extends Component {
     super(props);
 
     const state = {
+      language: "en",
       user: {},
       candidates: [],
       pendingVoters: []
@@ -206,6 +207,10 @@ export default class AppProvider extends Component {
     });
   };
 
+  setLanguage = language => {
+    this.setState({ language });
+  };
+
   // Render
 
   render() {
@@ -220,7 +225,8 @@ export default class AppProvider extends Component {
           requestApproval: this.requestApproval,
           addCandidate: this.addCandidate,
           batchApprove: this.batchApprove,
-          messages: MESSAGES.en,
+          messages: MESSAGES[this.state.language],
+          setLanguage: this.setLanguage,
           ...this.state
         }}
       >
