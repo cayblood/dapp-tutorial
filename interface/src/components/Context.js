@@ -1,6 +1,9 @@
 import React, { createContext } from "react";
+import MESSAGES from "../messages";
 
 export const { Provider, Consumer } = createContext({
+  language: "en",
+  messages: MESSAGES.en,
   user: {},
   candidates: [],
   pendingVoters: [],
@@ -12,7 +15,8 @@ export const { Provider, Consumer } = createContext({
   },
   requestApproval: voter => {
     return null;
-  }
+  },
+  setLanguage: language => {}
 });
 
 export default Component => {

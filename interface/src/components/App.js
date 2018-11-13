@@ -1,16 +1,24 @@
 import React, { Component } from "react";
 import Web3 from "web3";
 import utils from "web3-utils";
+import { uniq } from "lodash";
+
 import abi from "../election-abi.json";
+
 import { Provider } from "./Context";
 
 import Home from "./Home";
+
+import CONTRACT from "../contract-address";
+
+import MESSAGES from "../messages";
 
 export default class AppProvider extends Component {
   constructor(props) {
     super(props);
 
     const state = {
+      language: "en",
       user: {},
       candidates: [],
       pendingVoters: []
@@ -18,10 +26,7 @@ export default class AppProvider extends Component {
 
     if (window.web3) {
       state.web3 = new Web3(window.web3.currentProvider);
-      state.contract = new state.web3.eth.Contract(
-        abi,
-        "0x343fc71d8be1c399cb8aa9982cb37d3c32f1571e"
-      );
+      state.contract = new state.web3.eth.Contract(abi, CONTRACT);
     }
 
     this.state = state;
@@ -67,7 +72,7 @@ export default class AppProvider extends Component {
         const candidates = await this.fetchCandidates(this.state.contract);
         const pendingVoters = await this.fetchPendingVoters();
         this.setState({
-          pendingVoters,
+          pendingVoters: uniq(pendingVoters),
           candidates,
           user: userData
         });
@@ -202,11 +207,15 @@ export default class AppProvider extends Component {
     });
   };
 
+  setLanguage = language => {
+    this.setState({ language });
+  };
+
   // Render
 
   render() {
     if (!this.state.web3) {
-      return <span>Please install metamask to use this app.</span>;
+      return <span>{MESSAGES.en.homeError}</span>;
     }
     return (
       <Provider
@@ -216,6 +225,8 @@ export default class AppProvider extends Component {
           requestApproval: this.requestApproval,
           addCandidate: this.addCandidate,
           batchApprove: this.batchApprove,
+          messages: MESSAGES[this.state.language],
+          setLanguage: this.setLanguage,
           ...this.state
         }}
       >

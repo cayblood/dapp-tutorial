@@ -1,31 +1,34 @@
 {
-  "name": "dapp-tutorial",
+  "name": "dapp-tutorial-monorepo-",
+  "private": true,
   "version": "0.0.1",
   "description": "Election smart contract and companion dApp",
-  "main": "truffle-config.js",
-  "directories": {
-    "test": "test"
+  "workspaces": {
+    "packages": [
+      "interface",
+      "smart-contracts"
+    ]
   },
-  "dependencies": {
-    "bignumber": "^1.1.0",
-    "ethjs": "^0.4.0",
-    "ganache-core": "^2.2.1",
-    "openzeppelin-solidity": "^1.12.0",
-    "truffle-hdwallet-provider": "^0.0.6",
-    "web3": "github:ethereum/web3.js"
+  "devDependencies": {
+    "gh-pages": "^2.0.1",
+    "lerna": "^3.1.2"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "truffle test"
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "deploy": "cd interface && yarn deploy",
+    "migrate": "cd smart-contracts && yarn migrate",
+    "start": "cd interface && yarn start",
+    "test": "cd smart-contracts && yarn test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cayblood/dapp-tutorial.git"
+    "url": "git+https://github.com/mainframehq/dapp-tutorial.git"
   },
   "author": "Carl Youngblood",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cayblood/dapp-tutorial/issues"
+    "url": "https://github.com/mainframehq/dapp-tutorial/issues"
   },
-  "homepage": "https://github.com/cayblood/dapp-tutorial#readme"
+  "homepage": "https://github.com/mainframehq/dapp-tutorial#readme"
 }
