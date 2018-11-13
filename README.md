@@ -1,20 +1,23 @@
 # dapp-tutorial
+
 Election dapp tutorial
 
 ## installation
+
 0. enter desired npm environment using nvm (if desired)
 1. `npm install -g yarn`
-2. `yarn global add truffle`
-3. install [ganache](https://truffleframework.com/ganache)
-4. `yarn`
-5. `cd interface`
-6. `yarn` 
+1. `yarn global add truffle`
+1. install [ganache](https://truffleframework.com/ganache)
+1. `yarn`
+1. `yarn migrate` to generate the contract address
+1. Add the contract address to `/interface/src/contract-address.js`
 
 ## testing
-1. Run ganache
-2. `truffle test`
+
+0. Run ganache
+1. `yarn test`
 
 ## running the dapp
-1. Run ganache
-2. `cd interface`
-3. `yarn start`
+
+0. Run ganache
+1. `yarn start`

@@ -9,9 +9,9 @@ import { Provider } from "./Context";
 
 import Home from "./Home";
 
-import MESSAGES from "../messages";
+import CONTRACT from "../contract-address";
 
-const CONTRACT = "0x8aec984448c053d8d3ba66056593656e260b042a";
+import MESSAGES from "../messages";
 
 export default class AppProvider extends Component {
   constructor(props) {
