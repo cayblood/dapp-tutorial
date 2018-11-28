@@ -1,6 +1,6 @@
 # elections-dapp
 
-Election dapp tutorial
+Elections dapp tutorial
 
 ## installation
 
