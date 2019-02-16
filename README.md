@@ -1,18 +1,24 @@
-# dapp-tutorial
-Election dapp tutorial
+# elections-dapp
+
+Elections dapp tutorial
 
 ## installation
+
 0. enter desired npm environment using nvm (if desired)
-1. `npm install -g truffle`
-2. install [ganache](https://truffleframework.com/ganache)
-3. `npm install`
+1. `npm install -g yarn`
+1. `yarn global add truffle`
+1. install [ganache](https://truffleframework.com/ganache)
+1. `yarn`
+1. `yarn migrate` to generate the contract address
+1.  Add the contract address to `/interface/src/contract-address.js`
 
 ## testing
-1. Run ganache
-2. `truffle test`
+
+0. Run ganache
+1. Run `yarn test`
 
 ## running the dapp
-1. Run ganache
-2. `cd www`
-3. `python -m SimpleHTTPServer 8000`
-4. Open browser to http://localhost:8000/
+
+0. Run ganache
+1. Connect your MetaMask to your local ganache
+2. Run `yarn start`

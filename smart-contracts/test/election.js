@@ -35,10 +35,24 @@ contract('Election', (accounts) => {
       await instance.approveRegistration(voter, {from: owner});
     });
 
+    it('should allow owner to approve several registrations at once', async() => {
+      await instance.registerVoter({from: voter});
+      await instance.approveRegistrations([voter, voter], {from: owner});
+    });
+
     it('should not allow anyone but the contract owner to approve registrations', async() => {
       try {
         await instance.registerVoter({from: voter});
         await instance.approveRegistration(voter, {from: notOwner});
+      } catch (e) {
+        assert.equal(e.message, 'VM Exception while processing transaction: revert');
+      }
+    });
+
+    it('should not allow anyone but the contract owner to approve several registrations at once', async() => {
+      try {
+        await instance.registerVoter({from: voter});
+        await instance.approveRegistrations([voter, voter], {from: owner});
       } catch (e) {
         assert.equal(e.message, 'VM Exception while processing transaction: revert');
       }
@@ -80,6 +94,22 @@ contract('Election', (accounts) => {
       const registered = await instance.voterIsRegistered.call(unregistered);
       assert(registered === false);
     });
+
+    it('adding a registration should increase the registration count', async () => {
+      const registrationCount = await instance.getRegistrationCount();
+      await instance.registerVoter({from: voter});
+      const newRegistrationCount = await instance.getRegistrationCount();
+      assert(registrationCount.lt(newRegistrationCount));
+    });
+
+    it('registrations can be enumerated', async () => {
+      let startingIndex = await instance.getRegistrationCount();
+      await instance.registerVoter({from: voter});
+      let registration = await instance.getRegistrationForIndex(startingIndex);
+      assert.equal(registration, voter);
+      let endingIndex = await instance.getRegistrationCount();
+      assert(endingIndex.eq(startingIndex.plus(1)));
+    });
   });
 
   describe('approveRegistration', () => {
@@ -92,6 +122,13 @@ contract('Election', (accounts) => {
     it("works properly when called by contract owner on registered voter", async () => {
       await instance.registerVoter({from: voter});
       await instance.approveRegistration(voter, {from: owner});
+      const approved = await instance.registrationIsApproved.call(voter);
+      assert(approved);
+    });
+
+    it("works when called on several voters at once", async () => {
+      await instance.registerVoter({from: voter});
+      await instance.approveRegistrations([voter, voter], {from: owner});
       const approved = await instance.registrationIsApproved.call(voter);
       assert(approved);
     });
@@ -141,7 +178,7 @@ contract('Election', (accounts) => {
       await instance.voteForCandidate('George Washington', {from: voter});
       await instance.voteForCandidate('George Washington', {from: voter});
       const newVoteCount = await instance.getVoteCountForCandidate('George Washington');
-      assert(voteCount.plus(new BigNumber(1)).eq(newVoteCount));      
+      assert(voteCount.plus(new BigNumber(1)).eq(newVoteCount));
     });
   });
 });
